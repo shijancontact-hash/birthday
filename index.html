@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <title>If the World Could Pause for You</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f4eee6;
+      --muted: #b6aaa0;
+      --gold: #d7ad79;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: #090909; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #090909;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    button { font: inherit; }
+
+    .film-grain {
+      position: fixed;
+      inset: -50%;
+      z-index: 5;
+      pointer-events: none;
+      opacity: .09;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+      animation: grain .28s steps(2) infinite;
+    }
+
+    @keyframes grain {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(1%, -1%); }
+      50% { transform: translate(-1%, 1%); }
+      75% { transform: translate(1%, 1%); }
+    }
+
+    .light-leak {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      pointer-events: none;
+      opacity: .5;
+      background:
+        radial-gradient(ellipse at 82% 18%, rgba(119, 70, 38, .23), transparent 34%),
+        radial-gradient(ellipse at 12% 88%, rgba(56, 71, 72, .18), transparent 38%);
+      transition: opacity 1.2s ease, background 1.2s ease;
+    }
+
+    .experience {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 100svh;
+      padding: clamp(24px, 5vw, 58px) clamp(22px, 7vw, 96px) 28px;
+      isolation: isolate;
+    }
+
+    .topbar, .bottombar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .wordmark, .scene-count, .sound-toggle, .eyebrow, .progress-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .wordmark { color: rgba(244, 238, 230, .7); }
+    .sound-toggle {
+      padding: 8px 0 8px 12px;
+      border: 0;
+      background: transparent;
+      color: rgba(244, 238, 230, .68);
+      cursor: pointer;
+    }
+    .sound-toggle:hover, .sound-toggle:focus-visible { color: var(--ink); }
+
+    .stage {
+      position: relative;
+      display: grid;
+      align-items: center;
+      flex: 1;
+      min-height: auto;
+      padding: 38px 0;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity 900ms ease, transform 1100ms ease, visibility 900ms;
+      pointer-events: none;
+    }
+    .scene.is-active {
+      position: relative;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .scene-inner {
+      width: min(100%, 980px);
+      margin: 0 auto;
+    }
+
+    .opening { text-align: center; }
+    .opening .eyebrow { margin-bottom: 30px; color: var(--gold); }
+    .opening-copy {
+      max-width: 760px;
+      margin: 0 auto;
+      font-family: var(--serif);
+      font-size: clamp(30px, 5.2vw, 67px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+    .opening-copy span {
+      display: block;
+      opacity: 0;
+      filter: blur(5px);
+      transform: translateY(10px);
+      animation: reveal 1.4s ease forwards;
+    }
+    .opening-copy span:nth-child(2) { animation-delay: 2.2s; }
+    @keyframes reveal {
+      to { opacity: 1; filter: blur(0); transform: translateY(0); }
+    }
+    .opening .primary-button { margin-top: 45px; }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .75fr);
+      gap: clamp(35px, 8vw, 110px);
+      align-items: center;
+    }
+    .eyebrow { margin: 0 0 23px; color: var(--gold); }
+    h1, h2, p { margin-top: 0; }
+    h2 {
+      margin-bottom: 24px;
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 62px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+    .body-copy {
+      max-width: 550px;
+      color: rgba(244, 238, 230, .76);
+      font-family: var(--serif);
+      font-size: clamp(17px, 1.75vw, 21px);
+      line-height: 1.8;
+    }
+    .body-copy em { color: var(--ink); }
+
+    .memory-frame {
+      position: relative;
+      display: grid;
+      min-height: 350px;
+      aspect-ratio: 4 / 5;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background:
+        linear-gradient(160deg, transparent 20%, rgba(9,9,9,.78) 100%),
+        radial-gradient(ellipse at 68% 32%, rgba(231, 184, 122, .36), transparent 22%),
+        linear-gradient(135deg, #44392f, #19191a 58%, #222b2c);
+      box-shadow: 0 26px 90px rgba(0,0,0,.4);
+    }
+    .memory-frame::before, .memory-frame::after {
+      position: absolute;
+      content: "";
+      pointer-events: none;
+    }
+    .memory-frame::before {
+      inset: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .memory-frame::after {
+      width: 90%;
+      height: 45%;
+      right: -20%;
+      bottom: -7%;
+      border-radius: 50%;
+      background: rgba(226, 186, 132, .14);
+      filter: blur(50px);
+    }
+    .memory-frame.has-photo {
+      background-position: center;
+      background-size: cover;
+    }
+
+    .memory-note {
+      position: absolute;
+      right: -17px;
+      bottom: 25px;
+      z-index: 2;
+      padding: 13px 17px;
+      background: #eee5d9;
+      color: #302921;
+      box-shadow: 0 12px 28px rgba(0,0,0,.3);
+      font-family: var(--serif);
+      font-size: 14px;
+      transform: rotate(3deg);
+    }
+
+    .crossing .memory-frame {
+      min-height: 290px;
+      aspect-ratio: 1.18 / 1;
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.72), transparent 70%),
+        radial-gradient(ellipse at 50% 34%, rgba(229, 178, 113, .38), transparent 23%),
+        linear-gradient(140deg, #262a2b, #5b4536 60%, #171718);
+    }
+    .crossing .memory-frame::after {
+      width: 140%;
+      height: 23%;
+      right: -20%;
+      bottom: 19%;
+      background: rgba(207, 152, 100, .25);
+      filter: blur(36px);
+    }
+    .crossing .memory-note { right: auto; left: -18px; transform: rotate(-3deg); }
+
+    .little-things { max-width: 790px; margin: 0 auto; text-align: center; }
+    .little-things h2 { margin-bottom: 32px; }
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 auto 30px;
+      padding: 0;
+      list-style: none;
+    }
+    .details li {
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 30px;
+      color: rgba(244,238,230,.78);
+      font-family: var(--serif);
+      font-size: 15px;
+    }
+    .personal-note {
+      width: min(100%, 470px);
+      margin: 0 auto;
+      padding: 12px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.3);
+      border-radius: 0;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      text-align: center;
+    }
+    .personal-note::placeholder { color: rgba(244,238,230,.4); }
+
+    .future { text-align: center; }
+    .future .body-copy { margin-right: auto; margin-left: auto; }
+    .horizon {
+      position: relative;
+      height: clamp(160px, 26vh, 260px);
+      margin: 25px auto 10px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 76%, rgba(225, 172, 115, .56), transparent 8%),
+        linear-gradient(180deg, transparent 42%, rgba(218, 164, 112, .14) 68%, rgba(9,9,9,.6)),
+        linear-gradient(180deg, transparent 57%, rgba(218, 164, 112, .33) 57.3%, transparent 58%),
+        linear-gradient(180deg, #101214, #272523 60%, #101010);
+    }
+    .horizon::after {
+      position: absolute;
+      inset: auto 0 0;
+      height: 40%;
+      content: "";
+      background: linear-gradient(90deg, transparent, rgba(224,167,108,.25), transparent);
+      filter: blur(18px);
+    }
+
+    .finale { text-align: center; }
+    .finale .eyebrow { margin-bottom: 17px; }
+    .finale h2 { font-size: clamp(42px, 7.5vw, 88px); }
+    .finale .body-copy { margin-right: auto; margin-left: auto; }
+    .heart { display: inline-block; margin-top: 10px; color: #d8a78d; font-size: 22px; }
+    .replay-button {
+      margin-top: 30px;
+      border: 0;
+      background: transparent;
+      color: rgba(244,238,230,.58);
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 17px;
+      padding: 13px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(215,173,121,.7);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      transition: gap 250ms ease, color 250ms ease;
+    }
+    .primary-button:hover, .primary-button:focus-visible { gap: 24px; color: var(--gold); }
+    button:focus-visible, input:focus-visible, label:focus-within {
+      outline: 1px solid var(--gold);
+      outline-offset: 5px;
+    }
+
+    .scene-count { color: rgba(244,238,230,.48); white-space: nowrap; }
+    .progress-wrap { display: flex; align-items: center; gap: 13px; }
+    .progress-label { color: rgba(244,238,230,.42); }
+    .progress-track { width: clamp(60px, 11vw, 140px); height: 1px; background: rgba(255,255,255,.18); }
+    .progress-fill { width: 16.666%; height: 100%; background: var(--gold); transition: width 700ms ease; }
+    .scene-nav { display: flex; align-items: center; gap: 21px; }
+    .nav-button {
+      padding: 8px 0;
+      border: 0;
+      background: transparent;
+      color: rgba(244,238,230,.72);
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .nav-button:hover:not(:disabled) { color: var(--gold); }
+    .nav-button:disabled { opacity: .26; cursor: default; }
+
+    @media (max-width: 700px) {
+      .experience { padding: 23px 23px 20px; }
+      .split { grid-template-columns: 1fr; gap: 25px; }
+      .memory-frame { min-height: 210px; max-height: 31vh; aspect-ratio: 1.5 / 1; }
+      .crossing .memory-frame { min-height: 190px; max-height: 25vh; aspect-ratio: 1.5 / 1; }
+      .memory-note { right: -7px; bottom: 12px; }
+      .crossing .memory-note { left: -7px; }
+      .scene-inner { padding: 8px 2px; }
+      h2 { margin-bottom: 15px; }
+      .body-copy { font-size: 17px; line-height: 1.6; }
+      .scene-nav { gap: 12px; }
+      .nav-button { font-size: 9px; }
+      .progress-label { display: none; }
+      .wordmark, .scene-count { font-size: 9px; }
+      .opening-copy { font-size: clamp(32px, 9vw, 50px); }
+      .opening .eyebrow { margin-bottom: 22px; }
+      .opening .primary-button { margin-top: 32px; }
+      .details { gap: 7px; margin-bottom: 15px; }
+      .details li { padding: 8px 11px; font-size: 14px; }
+      .personal-note { font-size: 15px; }
+      .horizon { height: 17vh; min-height: 125px; margin: 16px auto 5px; }
+      .future .body-copy { font-size: 16px; }
+    }
+
+    @media (max-height: 690px) and (min-width: 701px) {
+      .experience { padding-top: 22px; padding-bottom: 18px; }
+      .stage { padding: 15px 0; }
+      .memory-frame { min-height: 280px; }
+      .crossing .memory-frame { min-height: 230px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="light-leak" aria-hidden="true"></div>
+  <div class="film-grain" aria-hidden="true"></div>
+  <main class="experience" aria-label="A birthday story for you">
+    <header class="topbar">
+      <div class="wordmark">November 16 <span aria-hidden="true">·</span> 2007—2026</div>
+      <button class="sound-toggle" type="button" aria-pressed="false">Sound off</button>
+    </header>
+
+    <div class="stage" aria-live="polite">
+      <section class="scene is-active" data-scene="0" aria-label="Opening">
+        <div class="scene-inner opening">
+          <p class="eyebrow">A little story, just for you</p>
+          <p class="opening-copy">
+            <span>Before you continue,</span>
+            <span>there’s something I want you to know…</span>
+          </p>
+          <p class="opening-copy" style="margin-top: 25px">
+            <span>If I could pause the entire world for one day,</span>
+            <span>I’d choose today.</span>
+          </p>
+          <button class="primary-button" type="button" data-next>Begin her story <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+<section class="scene" data-scene="1" aria-label="The day you arrived">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 01 <span aria-hidden="true">/</span> The beginning</p>
+    <div class="split">
+      <div>
+        <h2>The day you arrived</h2>
+        <p class="body-copy">November 16, 2007. The world became special that day. A little star from heaven was born. She had no idea about all the places she would go and all the memories she would make. She didn't know who she would become and like how much she would grow and how many things she would learn or how much life would change her along the way.
+
+Sometimes I wish I could go back to that day even just for a moment and tell that little girl that she's going to grow into someone truly amazing. That life will bring her some of the happiest days and some difficult ones too ofc but that she'll make mistakes and learn from them and discover new things about herself. And most importantly I'd tell her that one day someone would look at her and think she's one of the most special people in their entire world. And that someone is me.
+
+I'd tell her that someone would fall in love with her laugh and her personality and the way she is and even the little things about herself that she probably doesn't even notice.</p>
+        <button class="primary-button" type="button" data-next>And then <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="" aria-hidden="false">
+        <span class="memory-note">November 16, 2007</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" data-scene="2" aria-label="The years and memories">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 02 <span aria-hidden="true">/</span> Our story</p>
+    <div class="split">
+      <div>
+        <h2>Three years, and counting</h2>
+        <p class="body-copy">It's a little sad that I wasn't there for those first years. I missed all those little versions of you(mini sheeny) all the memories you made before I even came into your life. And sometimes I really wish I could've known you back then just to see you grow up and experience all those little moments with you.
+
+But something that I find so crazy is that we've already been together for 3 years, and that's only around 15% of your entire life. Maybe to you that sounds like a long time, but to me, it feels like so little. Like I've known you forever, and somehow, three years still don't feel like enough.
+
+But then I think about it, and there's something beautiful about it too. Every single year, every experience, every person you've met and every little thing you've been through has helped shape the person you are today. And somehow, I get to know that person, love her and appreciate her in ways I hope she never doubts.</p>
+        <button class="primary-button" type="button" data-next>Happy birthday <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="" aria-hidden="false">
+        <span class="memory-note">Three years of us</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section class="scene" data-scene="2" aria-label="A whole world before me">
+        <div class="scene-inner">
+          <p class="eyebrow">Scene 02 <span aria-hidden="true">/</span> Before our time</p>
+          <div class="split">
+            <div>
+              <h2>A whole world before me</h2>
+              <p class="body-copy">There were 15 years of your life I never got to witness. First steps, little adventures, birthdays, school days and all those tiny moments that made you who you are. I wish I could have seen them all. But I’m grateful they happened, because they led to the person I know today.</p>
+              <button class="primary-button" type="button" data-next>Our worlds crossed <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="memory-frame" data-photo="">
+              <span class="memory-note">All the little moments</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene crossing" data-scene="3" aria-label="Then our worlds crossed">
+        <div class="scene-inner">
+          <p class="eyebrow">Scene 03 <span aria-hidden="true">/</span> July 2023</p>
+          <div class="split">
+            <div>
+              <h2>Then our worlds crossed</h2>
+              <p class="body-copy">And then, somewhere along the way, our stories crossed. Two people who once had completely separate worlds suddenly became part of each other’s.</p>
+              <p class="body-copy"><em>July 2023</em> — the beginning of an us.</p>
+              <button class="primary-button" type="button" data-next>The little things <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="memory-frame" data-photo="">
+              <span class="memory-note">July 2023</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene" data-scene="4" aria-label="The little things">
+        <div class="scene-inner little-things">
+          <p class="eyebrow">Scene 04 <span aria-hidden="true">/</span> The details I keep</p>
+          <h2>The little things</h2>
+          <ul class="details">
+            <li>The way you laugh</li>
+            <li>Something you always say</li>
+            <li>Your little habits</li>
+            <li>The things you don’t realise I notice</li>
+            <li>How you make an ordinary day better</li>
+          </ul>
+          <p class="body-copy">It’s funny how sometimes the smallest things about someone become the things you remember the most.</p>
+          <input class="personal-note" type="text" maxlength="90" placeholder="Add one little thing only you would know…" aria-label="Add a personal detail">
+          <div><button class="primary-button" type="button" data-next style="margin-top: 25px">What comes next <span aria-hidden="true">→</span></button></div>
+        </div>
+      </section>
+
+      <section class="scene" data-scene="5" aria-label="Everything I haven't experienced with you yet">
+        <div class="scene-inner future">
+          <p class="eyebrow">Scene 05 <span aria-hidden="true">/</span> All that’s still ahead</p>
+          <h2>Everything I haven’t experienced with you yet</h2>
+          <p class="body-copy">We’ve already made so many memories from miles apart. I can’t wait for all the ones we won’t have to capture through a screen.</p>
+          <div class="horizon" aria-hidden="true"></div>
+          <p class="body-copy">Our first birthday together in person. Places we haven’t seen. Ordinary mornings. Little dates. All the memories still waiting for us.</p>
+          <button class="primary-button" type="button" data-next>Just for you <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <section class="scene" data-scene="6" aria-label="Just for you">
+        <div class="scene-inner finale">
+          <p class="eyebrow">Scene 06 <span aria-hidden="true">/</span> Just for you</p>
+          <h2>Happy 19th birthday.</h2>
+          <p class="body-copy">Today, the world celebrates the day you were born. But I hope you also take a moment to celebrate the person you’ve become. You deserve to feel appreciated, not just today, but every day.</p>
+          <p class="body-copy">And if I could choose one thing to give you today, it would be the ability to see yourself through my eyes.<br><span class="heart" aria-label="love">♡</span></p>
+          <button class="replay-button" type="button" data-replay>Watch our story again</button>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bottombar">
+      <div class="scene-count" aria-live="polite">Opening</div>
+      <div class="progress-wrap" aria-label="Story progress">
+        <span class="progress-label">A story in six scenes</span>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+      </div>
+      <nav class="scene-nav" aria-label="Scene navigation">
+        <button class="nav-button previous" type="button" aria-label="Previous scene" disabled>← <span>Back</span></button>
+        <button class="nav-button next" type="button" aria-label="Next scene">Next <span aria-hidden="true">→</span></button>
+      </nav>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const scenes = Array.from(document.querySelectorAll(".scene"));
+      const count = document.querySelector(".scene-count");
+      const progress = document.querySelector(".progress-fill");
+      const previous = document.querySelector(".previous");
+      const next = document.querySelector(".next");
+      const soundToggle = document.querySelector(".sound-toggle");
+      const labels = ["Opening", "The day you arrived", "A whole world before me", "Then our worlds crossed", "The little things", "All that’s still ahead", "Just for you"];
+      let active = 0;
+      let audioContext;
+      let audioNodes = [];
+
+      function showScene(index) {
+        active = Math.max(0, Math.min(index, scenes.length - 1));
+        scenes.forEach((scene, i) => {
+          const isActive = i === active;
+          scene.classList.toggle("is-active", isActive);
+          scene.setAttribute("aria-hidden", String(!isActive));
+          scene.inert = !isActive;
+        });
+        count.textContent = labels[active];
+        progress.style.width = `${(active / (scenes.length - 1)) * 100}%`;
+        previous.disabled = active === 0;
+        next.disabled = active === scenes.length - 1;
+      }
+
+      function stopSound() {
+        audioNodes.forEach(node => {
+          try { node.stop(); } catch (error) {
+            if (error.name !== "InvalidStateError") throw error;
+          }
+        });
+        audioNodes = [];
+        if (audioContext && audioContext.state !== "closed") audioContext.close();
+        audioContext = undefined;
+        soundToggle.textContent = "Sound off";
+        soundToggle.setAttribute("aria-pressed", "false");
+      }
+
+      async function startSound() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) {
+          soundToggle.textContent = "Sound unavailable";
+          return;
+        }
+        audioContext = new AudioContextClass();
+        await audioContext.resume();
+        const master = audioContext.createGain();
+        master.gain.setValueAtTime(0, audioContext.currentTime);
+        master.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 2.5);
+        master.connect(audioContext.destination);
+        [110, 164.81, 220].forEach((frequency, index) => {
+          const oscillator = audioContext.createOscillator();
+          const voice = audioContext.createGain();
+          oscillator.type = "sine";
+          oscillator.frequency.value = frequency;
+          voice.gain.value = index === 0 ? 0.6 : 0.22;
+          oscillator.connect(voice);
+          voice.connect(master);
+          oscillator.start();
+          audioNodes.push(oscillator);
+        });
+        soundToggle.textContent = "Sound on";
+        soundToggle.setAttribute("aria-pressed", "true");
+      }
+
+      document.querySelectorAll("[data-next]").forEach(button => {
+        button.addEventListener("click", () => showScene(active + 1));
+      });
+      document.querySelector("[data-replay]").addEventListener("click", () => showScene(0));
+      previous.addEventListener("click", () => showScene(active - 1));
+      next.addEventListener("click", () => showScene(active + 1));
+      document.addEventListener("keydown", event => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        if (event.key === "ArrowRight") showScene(active + 1);
+        if (event.key === "ArrowLeft") showScene(active - 1);
+      });
+      soundToggle.addEventListener("click", async () => {
+        if (audioContext) {
+          stopSound();
+          return;
+        }
+        try {
+          await startSound();
+        } catch (error) {
+          stopSound();
+          soundToggle.textContent = "Sound unavailable";
+          console.error("Could not start the optional soundscape.", error);
+        }
+      });
+
+      document.querySelectorAll(".memory-frame[data-photo]").forEach(frame => {
+        const path = frame.dataset.photo;
+        if (!path) return;
+        frame.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,.42), transparent 55%), url("${path}")`;
+        frame.classList.add("has-photo");
+      });
+      window.addEventListener("pagehide", () => {
+        if (audioContext) stopSound();
+      });
+
+      showScene(0);
+    })();
+  </script>
+</body>
+</html>
