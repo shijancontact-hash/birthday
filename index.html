@@ -324,6 +324,107 @@
       text-transform: uppercase;
     }
 
+    .birthday-cake { text-align: center; }
+    .cake {
+      position: relative;
+      width: min(390px, 82vw);
+      height: 260px;
+      margin: 20px auto 28px;
+    }
+    .cake-plate {
+      position: absolute;
+      left: 3%;
+      bottom: 8px;
+      width: 94%;
+      height: 22px;
+      border: 1px solid rgba(238, 210, 178, .6);
+      border-radius: 50%;
+      background: linear-gradient(#d3b99e, #706052);
+      box-shadow: 0 15px 32px rgba(0,0,0,.4);
+    }
+    .cake-tier {
+      position: absolute;
+      left: 12%;
+      bottom: 25px;
+      width: 76%;
+      height: 100px;
+      border-radius: 12px 12px 25px 25px;
+      background: linear-gradient(90deg, #9b5b54, #d99583 24%, #e8b99a 72%, #9b5b54);
+      box-shadow: inset 0 -12px 0 rgba(87, 42, 42, .24), 0 13px 22px rgba(0,0,0,.35);
+    }
+    .cake-tier::before {
+      position: absolute;
+      top: -13px;
+      left: -2%;
+      width: 104%;
+      height: 30px;
+      border-radius: 50%;
+      background: #f0d9c2;
+      content: "";
+    }
+    .cake-tier::after {
+      position: absolute;
+      top: 5px;
+      left: 5%;
+      width: 90%;
+      height: 20px;
+      border-radius: 50%;
+      background: #fae9d8;
+      content: "";
+    }
+    .candle {
+      position: absolute;
+      z-index: 1;
+      bottom: 116px;
+      width: 12px;
+      height: 57px;
+      border-radius: 4px 4px 1px 1px;
+      background: repeating-linear-gradient(135deg, #f8e6c6 0 7px, #c98773 7px 12px);
+      box-shadow: 0 0 13px rgba(255,195,121,.15);
+    }
+    .candle-left { left: 37%; }
+    .candle-center { left: 49%; height: 68px; }
+    .candle-right { left: 61%; }
+    .flame {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 3px);
+      width: 13px;
+      height: 22px;
+      border-radius: 50% 50% 48% 48%;
+      background: radial-gradient(ellipse at 50% 70%, #fff8cc 0 18%, #ffc66e 40%, #f27943 74%, transparent 76%);
+      filter: drop-shadow(0 0 9px rgba(255,177,76,.8));
+      transform: translateX(-50%);
+      animation: flicker .8s ease-in-out infinite alternate;
+      transform-origin: 50% 100%;
+    }
+    @keyframes flicker {
+      from { transform: translateX(-50%) rotate(-5deg) scale(.94); }
+      to { transform: translateX(-50%) rotate(5deg) scale(1.06); }
+    }
+    .cake.is-blown .flame { display: none; }
+    .cake.is-blown .candle { box-shadow: none; }
+    .cake-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .cake-status {
+      min-height: 1.6em;
+      margin: 19px 0 0;
+      color: rgba(244,238,230,.72);
+      font-family: var(--serif);
+      font-size: 16px;
+    }
+    .video-reveal { width: min(660px, 100%); margin: 26px auto 0; }
+    .video-reveal[hidden] { display: none; }
+    .birthday-video {
+      display: block;
+      width: 100%;
+      max-height: 55vh;
+      aspect-ratio: 16 / 9;
+      background: #111;
+      object-fit: contain;
+      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+    }
+    .video-hint { margin: 10px 0 0; color: rgba(244,238,230,.55); font-size: 12px; }
+
     .primary-button {
       display: inline-flex;
       align-items: center;
@@ -437,14 +538,10 @@
     <div class="split">
       <div>
         <h2>The day you arrived</h2>
-        <p class="body-copy">November 16, 2007. The world became special that day. A little star from heaven was born. She had no idea about all the places she would go and all the memories she would make. She didn't know who she would become and like how much she would grow and how many things she would learn or how much life would change her along the way.
-
-Sometimes I wish I could go back to that day even just for a moment and tell that little girl that she's going to grow into someone truly amazing. That life will bring her some of the happiest days and some difficult ones too ofc but that she'll make mistakes and learn from them and discover new things about herself. And most importantly I'd tell her that one day someone would look at her and think she's one of the most special people in their entire world. And that someone is me.
-
-I'd tell her that someone would fall in love with her laugh and her personality and the way she is and even the little things about herself that she probably doesn't even notice.</p>
+        <p class="body-copy">November 16, 2007. The world became special that day. A little star from heaven was born (ahahahaha, yk aasti toilet ma huda I thought to start like this and I felt so proud that i came up to this but anyywayss). That little star had no idea about all the places she would go and all the memories she would make. She didn't know who she would become and like how much she would grow. Sometimes I wish I could go back to that day even just for a moment and tell that little girl that she's going to grow into someone truly amazing(dherai na maskiaa haiiii). That life will bring her some of the happiest days and some difficult ones too ofc but that she'll make mistakes and learn from them and discover new things about herself. And most importantly I'd tell her that one day someone would look at her and think she's one of the most special people in their entire world. And that someone is me. I'd tell her that someone would fall in love with her laugh and her personality and the way she is and even the little things about herself that she probably doesn't even notice.</p>
         <button class="primary-button" type="button" data-next>And then <span aria-hidden="true">→</span></button>
       </div>
-      <div class="memory-frame" data-photo="" aria-hidden="false">
+      <div class="memory-frame" data-photo="1.png" aria-hidden="false">
         <span class="memory-note">November 16, 2007</span>
       </div>
     </div>
@@ -464,89 +561,158 @@ But something that I find so crazy is that we've already been together for 3 yea
 But then I think about it, and there's something beautiful about it too. Every single year, every experience, every person you've met and every little thing you've been through has helped shape the person you are today. And somehow, I get to know that person, love her and appreciate her in ways I hope she never doubts.</p>
         <button class="primary-button" type="button" data-next>Happy birthday <span aria-hidden="true">→</span></button>
       </div>
-      <div class="memory-frame" data-photo="" aria-hidden="false">
+      <div class="memory-frame" data-photo="2.png" aria-hidden="false">
         <span class="memory-note">Three years of us</span>
       </div>
     </div>
   </div>
 </section>
 
-      <section class="scene" data-scene="2" aria-label="A whole world before me">
-        <div class="scene-inner">
-          <p class="eyebrow">Scene 02 <span aria-hidden="true">/</span> Before our time</p>
-          <div class="split">
-            <div>
-              <h2>A whole world before me</h2>
-              <p class="body-copy">There were 15 years of your life I never got to witness. First steps, little adventures, birthdays, school days and all those tiny moments that made you who you are. I wish I could have seen them all. But I’m grateful they happened, because they led to the person I know today.</p>
-              <button class="primary-button" type="button" data-next>Our worlds crossed <span aria-hidden="true">→</span></button>
-            </div>
-            <div class="memory-frame" data-photo="">
-              <span class="memory-note">All the little moments</span>
-            </div>
-          </div>
-        </div>
-      </section>
+<section class="scene" data-scene="3" aria-label="The little things">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 03 <span aria-hidden="true">/</span> The details I keep</p>
+    <div class="split">
+      <div>
+        <h2>The little things</h2>
+        <p class="body-copy">I think one of my favourite things about loving you is that there's just so much to love, and it's not always the big things either. It's all the little things that you probably don't even realise I notice. The way you laugh and the way you talk and your random expressions and the little things you say and your habits and all the silly things you do without even thinking about them. Even the smallest things somehow manage to make me smile.</p>
 
-      <section class="scene crossing" data-scene="3" aria-label="Then our worlds crossed">
-        <div class="scene-inner">
-          <p class="eyebrow">Scene 03 <span aria-hidden="true">/</span> July 2023</p>
-          <div class="split">
-            <div>
-              <h2>Then our worlds crossed</h2>
-              <p class="body-copy">And then, somewhere along the way, our stories crossed. Two people who once had completely separate worlds suddenly became part of each other’s.</p>
-              <p class="body-copy"><em>July 2023</em> — the beginning of an us.</p>
-              <button class="primary-button" type="button" data-next>The little things <span aria-hidden="true">→</span></button>
-            </div>
-            <div class="memory-frame" data-photo="">
-              <span class="memory-note">July 2023</span>
-            </div>
-          </div>
-        </div>
-      </section>
+        <p class="body-copy">I love how you can make an ordinary conversation feel like the best part of my day. How even when we're doing absolutely nothing, I still enjoy having you around. I love hearing about your day and listening to your random stories and just getting to know all the little details about you that make you you.</p>
 
-      <section class="scene" data-scene="4" aria-label="The little things">
-        <div class="scene-inner little-things">
-          <p class="eyebrow">Scene 04 <span aria-hidden="true">/</span> The details I keep</p>
-          <h2>The little things</h2>
-          <ul class="details">
-            <li>The way you laugh</li>
-            <li>Something you always say</li>
-            <li>Your little habits</li>
-            <li>The things you don’t realise I notice</li>
-            <li>How you make an ordinary day better</li>
-          </ul>
-          <p class="body-copy">It’s funny how sometimes the smallest things about someone become the things you remember the most.</p>
-          <input class="personal-note" type="text" maxlength="90" placeholder="Add one little thing only you would know…" aria-label="Add a personal detail">
-          <div><button class="primary-button" type="button" data-next style="margin-top: 25px">What comes next <span aria-hidden="true">→</span></button></div>
-        </div>
-      </section>
+        <p class="body-copy">And I hope you never feel like you have to change any of those little things about yourself. Because I don't think you realise how special they are to me. Maybe they're just ordinary things to you, but to me they're a million little reasons why I keep falling for you.</p>
 
-      <section class="scene" data-scene="5" aria-label="Everything I haven't experienced with you yet">
-        <div class="scene-inner future">
-          <p class="eyebrow">Scene 05 <span aria-hidden="true">/</span> All that’s still ahead</p>
-          <h2>Everything I haven’t experienced with you yet</h2>
-          <p class="body-copy">We’ve already made so many memories from miles apart. I can’t wait for all the ones we won’t have to capture through a screen.</p>
-          <div class="horizon" aria-hidden="true"></div>
-          <p class="body-copy">Our first birthday together in person. Places we haven’t seen. Ordinary mornings. Little dates. All the memories still waiting for us.</p>
-          <button class="primary-button" type="button" data-next>Just for you <span aria-hidden="true">→</span></button>
-        </div>
-      </section>
-
-      <section class="scene" data-scene="6" aria-label="Just for you">
-        <div class="scene-inner finale">
-          <p class="eyebrow">Scene 06 <span aria-hidden="true">/</span> Just for you</p>
-          <h2>Happy 19th birthday.</h2>
-          <p class="body-copy">Today, the world celebrates the day you were born. But I hope you also take a moment to celebrate the person you’ve become. You deserve to feel appreciated, not just today, but every day.</p>
-          <p class="body-copy">And if I could choose one thing to give you today, it would be the ability to see yourself through my eyes.<br><span class="heart" aria-label="love">♡</span></p>
-          <button class="replay-button" type="button" data-replay>Watch our story again</button>
-        </div>
-      </section>
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="3.png">
+        <span class="memory-note">My favourite little things</span>
+      </div>
     </div>
+  </div>
+</section>
+<section class="scene" data-scene="4" aria-label="All the things we still have to do">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 04 <span aria-hidden="true">/</span> Our future together</p>
+    <div class="split">
+      <div>
+        <h2>All the things we still have to do</h2>
+        <p class="body-copy">Sometimes I think about how many things we still haven't done together and honestly it makes me so excited. We've already made so many memories and shared so many moments but there's still so much I want to experience with you. There's just so much more waiting for us.</p>
+
+        <p class="body-copy">I can't wait for the day when we're finally together and I don't have to miss you through a screen anymore. When I can actually hug you and hold your hand and annoy you in person (which I promise I'll do a lot), go on random little dates and just spend time with you without having to worry about when we'll have to say goodbye again.</p>
+
+        <p class="body-copy">I wanna travel with you and try new things and take a million pictures and have random adventures and even just do the most boring everyday things together. Because honestly, it doesn't really matter what we're doing as long as I'm doing it with you.</p>
+
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="4.png">
+        <span class="memory-note">All our memories yet to come</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="scene" data-scene="5" aria-label="The everyday moments">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 05 <span aria-hidden="true">/</span> The everyday moments</p>
+    <div class="split">
+      <div>
+        <h2>The little moments together</h2>
+        <p class="body-copy">I want to experience all the little things with you too. Waking up next to you and going out for no reason and laughing at the stupidest things and making memories out of days that don't seem special at all.</p>
+
+        <p class="body-copy">And I know not every day is going to be perfect but that's okay. I don't expect everything to always be easy. I just hope that no matter what life throws at us we just keep growing together and making the most out of everything.</p>
+
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="5.png">
+        <span class="memory-note">Every little moment with you</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="scene" data-scene="6" aria-label="Watching you grow">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 06 <span aria-hidden="true">/</span> Watching you grow</p>
+    <div class="split">
+      <div>
+        <h2>Watching you grow</h2>
+        <p class="body-copy">It's honestly crazy to think that I met you when you were 15 and now you're turning 19. Four whole years. When I think about it it makes me realise just how much time has passed and how much you've grown since then. I've seen different sides of you like watched you change and learn new things and experience different moments and slowly become the person you are today.</p>
+
+        <p class="body-copy">It's such a special feeling knowing that I've been able to witness so many different chapters of your life. You've grown so much and even though I know there's still so much waiting for you and I hope you know how proud I am of the person you're becoming.</p>
+
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="6.png">
+        <span class="memory-note">You were 15 here...</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="scene" data-scene="7" aria-label="Your new chapter">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 07 <span aria-hidden="true">/</span> Your new chapter</p>
+    <div class="split">
+      <div>
+        <h2>Your new chapter</h2>
+        <p class="body-copy">And now here you are 19 years old. I hope this new chapter brings you everything you've ever wished for and so much more. I hope I get to keep watching you grow and celebrating your achievements and being there for your little moments and making even more memories with you. And if there's one thing I know it's that I'm really lucky I got to meet you at 15 and even luckier that I still get to be here at 19.</p>
+
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="7.png">
+        <span class="memory-note">Here's to everything ahead ❤️</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="scene" data-scene="9" aria-label="My biggest wish for you">
+  <div class="scene-inner">
+    <p class="eyebrow">Scene 09 <span aria-hidden="true">/</span> My biggest wish for you</p>
+    <div class="split">
+      <div>
+        <h2>My biggest wish for you</h2>
+        <p class="body-copy">My biggest wish for you is that Mahadev always watches over you and guides you through every chapter of your life. I pray that Lord Shiva blesses you with good health and strength and peace and protects you from anything that could ever take away your smile. May he always guide you towards the things that are meant for you and give you the strength to get through the things that aren't easy.</p>
+
+        <p class="body-copy">And selfishly, I pray that Mahadev allows me to be beside you through many more birthdays and memories and chapters of your life. I hope I get to keep watching you grow and celebrating your happiness and making countless memories with you. May this new year of your life be filled with blessings and love and protection and everything beautiful that you deserve.</p>
+
+        <p class="body-copy">Har Har Mahadev.</p>
+
+        <button class="primary-button" type="button" data-next>What comes next <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="memory-frame" data-photo="">
+        <span class="memory-note">May Mahadev always bless you ❤️</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section class="scene" data-scene="cake" aria-label="Make a birthday wish">
+        <div class="scene-inner birthday-cake">
+          <p class="eyebrow">One last birthday wish</p>
+          <h2>Make a wish.</h2>
+          <p class="body-copy" style="margin-right:auto;margin-left:auto">Blow toward your microphone to put out the candles, or tap the button if you prefer.</p>
+          <div class="cake" aria-label="A birthday cake with three lit candles">
+            <div class="cake-plate"></div>
+            <div class="cake-tier"></div>
+            <div class="candle candle-left"><span class="flame"></span></div>
+            <div class="candle candle-center"><span class="flame"></span></div>
+            <div class="candle candle-right"><span class="flame"></span></div>
+          </div>
+          <div class="cake-controls">
+            <button class="primary-button" type="button" data-microphone>Enable mic &amp; blow</button>
+            <button class="primary-button" type="button" data-tap-blow>Tap to blow</button>
+          </div>
+          <p class="cake-status" aria-live="polite">Your microphone is only used to detect the breath. Nothing is recorded.</p>
+          <div class="video-reveal" data-video-reveal hidden>
+            <video class="birthday-video" controls playsinline preload="metadata">
+              <source src="birthday-video.mp4" type="video/mp4">
+              Your browser does not support video playback.
+            </video>
+            <p class="video-hint">Add your video as <strong>birthday-video.mp4</strong> beside index.html.</p>
+          </div>
+          <button class="replay-button" type="button" data-replay>Start the story again</button>
+        </div>
+      </section>
 
     <footer class="bottombar">
       <div class="scene-count" aria-live="polite">Opening</div>
       <div class="progress-wrap" aria-label="Story progress">
-        <span class="progress-label">A story in six scenes</span>
+        <span class="progress-label">Nine scenes &amp; a wish</span>
         <div class="progress-track"><div class="progress-fill"></div></div>
       </div>
       <nav class="scene-nav" aria-label="Scene navigation">
@@ -564,13 +730,25 @@ But then I think about it, and there's something beautiful about it too. Every s
       const previous = document.querySelector(".previous");
       const next = document.querySelector(".next");
       const soundToggle = document.querySelector(".sound-toggle");
-      const labels = ["Opening", "The day you arrived", "A whole world before me", "Then our worlds crossed", "The little things", "All that’s still ahead", "Just for you"];
+      const labels = scenes.map(scene => scene.getAttribute("aria-label") || "Birthday story");
+      const cakeIndex = scenes.length - 1;
+      const cake = document.querySelector(".cake");
+      const cakeStatus = document.querySelector(".cake-status");
+      const microphoneButton = document.querySelector("[data-microphone]");
+      const tapBlowButton = document.querySelector("[data-tap-blow]");
+      const videoReveal = document.querySelector("[data-video-reveal]");
+      const birthdayVideo = document.querySelector(".birthday-video");
       let active = 0;
       let audioContext;
       let audioNodes = [];
+      let microphoneStream;
+      let microphoneContext;
+      let microphoneFrame;
 
       function showScene(index) {
+        if (active === cakeIndex && index !== cakeIndex) stopMicrophone();
         active = Math.max(0, Math.min(index, scenes.length - 1));
+        window.scrollTo({ top: 0, behavior: "smooth" });
         scenes.forEach((scene, i) => {
           const isActive = i === active;
           scene.classList.toggle("is-active", isActive);
@@ -581,6 +759,93 @@ But then I think about it, and there's something beautiful about it too. Every s
         progress.style.width = `${(active / (scenes.length - 1)) * 100}%`;
         previous.disabled = active === 0;
         next.disabled = active === scenes.length - 1;
+      }
+
+      function stopMicrophone() {
+        if (microphoneFrame) cancelAnimationFrame(microphoneFrame);
+        microphoneFrame = undefined;
+        if (microphoneStream) microphoneStream.getTracks().forEach(track => track.stop());
+        microphoneStream = undefined;
+        if (microphoneContext && microphoneContext.state !== "closed") microphoneContext.close();
+        microphoneContext = undefined;
+      }
+
+      function blowOutCandles() {
+        if (cake.classList.contains("is-blown")) return;
+        cake.classList.add("is-blown");
+        cake.setAttribute("aria-label", "A birthday cake with its candles blown out");
+        stopMicrophone();
+        microphoneButton.hidden = true;
+        tapBlowButton.hidden = true;
+        cakeStatus.textContent = "Wish made. Here’s something for you…";
+        videoReveal.hidden = false;
+        birthdayVideo.load();
+      }
+
+      async function enableMicrophone() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          cakeStatus.textContent = "Microphone access isn’t available here. Tap the button to blow out the candles.";
+          return;
+        }
+        microphoneButton.disabled = true;
+        cakeStatus.textContent = "Allow microphone access, then blow toward your device.";
+        try {
+          microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) {
+            stopMicrophone();
+            cakeStatus.textContent = "Microphone breath detection isn’t supported here. Tap the button to blow.";
+            return;
+          }
+          microphoneContext = new AudioContextClass();
+          await microphoneContext.resume();
+          const analyser = microphoneContext.createAnalyser();
+          analyser.fftSize = 512;
+          microphoneContext.createMediaStreamSource(microphoneStream).connect(analyser);
+          const samples = new Uint8Array(analyser.fftSize);
+          let loudFrames = 0;
+          microphoneButton.disabled = false;
+          microphoneButton.textContent = "Listening… blow now";
+          cakeStatus.textContent = "Listening for your breath…";
+
+          function listenForBlow() {
+            if (!microphoneContext || cake.classList.contains("is-blown")) return;
+            analyser.getByteTimeDomainData(samples);
+            let sum = 0;
+            for (let i = 0; i < samples.length; i++) {
+              const value = (samples[i] - 128) / 128;
+              sum += value * value;
+            }
+            loudFrames = Math.sqrt(sum / samples.length) > 0.12 ? loudFrames + 1 : 0;
+            if (loudFrames >= 8) {
+              blowOutCandles();
+              return;
+            }
+            microphoneFrame = requestAnimationFrame(listenForBlow);
+          }
+          microphoneFrame = requestAnimationFrame(listenForBlow);
+        } catch (error) {
+          stopMicrophone();
+          microphoneButton.disabled = false;
+          cakeStatus.textContent = error.name === "NotAllowedError"
+            ? "Microphone permission was denied. Tap the button to blow out the candles instead."
+            : "Couldn’t start the microphone. Tap the button to blow out the candles instead.";
+          console.error("Could not start birthday breath detection.", error);
+        }
+      }
+
+      function resetCake() {
+        stopMicrophone();
+        cake.classList.remove("is-blown");
+        cake.setAttribute("aria-label", "A birthday cake with three lit candles");
+        microphoneButton.hidden = false;
+        microphoneButton.disabled = false;
+        microphoneButton.textContent = "Enable mic & blow";
+        tapBlowButton.hidden = false;
+        videoReveal.hidden = true;
+        birthdayVideo.pause();
+        birthdayVideo.currentTime = 0;
+        cakeStatus.textContent = "Your microphone is only used to detect the breath. Nothing is recorded.";
       }
 
       function stopSound() {
@@ -626,9 +891,14 @@ But then I think about it, and there's something beautiful about it too. Every s
       document.querySelectorAll("[data-next]").forEach(button => {
         button.addEventListener("click", () => showScene(active + 1));
       });
-      document.querySelector("[data-replay]").addEventListener("click", () => showScene(0));
+      document.querySelectorAll("[data-replay]").forEach(button => button.addEventListener("click", () => {
+        resetCake();
+        showScene(0);
+      }));
       previous.addEventListener("click", () => showScene(active - 1));
       next.addEventListener("click", () => showScene(active + 1));
+      microphoneButton.addEventListener("click", enableMicrophone);
+      tapBlowButton.addEventListener("click", blowOutCandles);
       document.addEventListener("keydown", event => {
         if (event.altKey || event.ctrlKey || event.metaKey) return;
         if (event.key === "ArrowRight") showScene(active + 1);
