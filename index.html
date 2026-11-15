@@ -81,7 +81,7 @@
       gap: 20px;
     }
 
-    .wordmark, .scene-count, .sound-toggle, .eyebrow, .progress-label {
+    .wordmark, .scene-count, .eyebrow, .progress-label {
       font-size: 10px;
       font-weight: 500;
       letter-spacing: .22em;
@@ -89,15 +89,6 @@
     }
 
     .wordmark { color: rgba(244, 238, 230, .7); }
-    .sound-toggle {
-      padding: 8px 0 8px 12px;
-      border: 0;
-      background: transparent;
-      color: rgba(244, 238, 230, .68);
-      cursor: pointer;
-    }
-    .sound-toggle:hover, .sound-toggle:focus-visible { color: var(--ink); }
-
     .stage {
       position: relative;
       display: grid;
@@ -325,11 +316,12 @@
     }
 
     .birthday-cake { text-align: center; }
+    .birthday-cake .body-copy { margin-right: auto; margin-left: auto; }
     .cake {
       position: relative;
       width: min(390px, 82vw);
-      height: 260px;
-      margin: 20px auto 28px;
+      height: 245px;
+      margin: 14px auto 20px;
     }
     .cake-plate {
       position: absolute;
@@ -380,7 +372,6 @@
       height: 57px;
       border-radius: 4px 4px 1px 1px;
       background: repeating-linear-gradient(135deg, #f8e6c6 0 7px, #c98773 7px 12px);
-      box-shadow: 0 0 13px rgba(255,195,121,.15);
     }
     .candle-left { left: 37%; }
     .candle-center { left: 49%; height: 68px; }
@@ -403,27 +394,88 @@
       to { transform: translateX(-50%) rotate(5deg) scale(1.06); }
     }
     .cake.is-blown .flame { display: none; }
-    .cake.is-blown .candle { box-shadow: none; }
     .cake-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
     .cake-status {
       min-height: 1.6em;
-      margin: 19px 0 0;
+      margin: 14px 0;
       color: rgba(244,238,230,.72);
       font-family: var(--serif);
       font-size: 16px;
     }
-    .video-reveal { width: min(660px, 100%); margin: 26px auto 0; }
-    .video-reveal[hidden] { display: none; }
-    .birthday-video {
-      display: block;
-      width: 100%;
-      max-height: 55vh;
-      aspect-ratio: 16 / 9;
-      background: #111;
-      object-fit: contain;
-      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+    .balloon-reveal[hidden], .birthday-letter[hidden] { display: none; }
+    .balloon-reveal { min-height: 150px; }
+    .balloon {
+      position: relative;
+      display: grid;
+      width: 100px;
+      height: 124px;
+      margin: 14px auto 0;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: 50% 50% 46% 46%;
+      background: radial-gradient(ellipse at 33% 24%, #ffe1d1, #e49a9c 35%, #ae566d 76%, #773c53);
+      box-shadow: inset -10px -8px 18px rgba(73,24,52,.28), 0 0 34px rgba(206,126,139,.24);
+      color: #fff6ef;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 14px;
+      animation: float-balloon 2.8s ease-in-out infinite;
     }
-    .video-hint { margin: 10px 0 0; color: rgba(244,238,230,.55); font-size: 12px; }
+    .balloon::before {
+      position: absolute;
+      bottom: -7px;
+      left: calc(50% - 5px);
+      width: 10px;
+      height: 11px;
+      background: #a64e67;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      content: "";
+    }
+    .balloon::after {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 50%;
+      width: 1px;
+      height: 54px;
+      background: rgba(238,210,198,.6);
+      content: "";
+    }
+    @keyframes float-balloon {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-13px) rotate(2deg); }
+    }
+    .balloon.is-popping { animation: pop-balloon 260ms ease-in forwards; pointer-events: none; }
+    @keyframes pop-balloon {
+      to { opacity: 0; transform: scale(1.7); }
+    }
+    .birthday-letter {
+      width: min(460px, 100%);
+      margin: 20px auto 0;
+      padding: clamp(24px, 5vw, 40px);
+      border: 1px solid rgba(230,197,158,.38);
+      background: linear-gradient(145deg, rgba(247,235,216,.12), rgba(121,87,73,.09));
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+      animation: letter-appear 700ms ease both;
+    }
+    @keyframes letter-appear {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .birthday-letter .letter-greeting {
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    .birthday-letter h3 {
+      margin: 0 0 14px;
+      font-family: var(--serif);
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 400;
+    }
+    .birthday-letter p:last-child { margin-bottom: 0; }
+    .birthday-letter .letter-signoff { margin-top: 20px; color: var(--gold); font-family: var(--serif); }
 
     .primary-button {
       display: inline-flex;
@@ -513,7 +565,6 @@
   <main class="experience" aria-label="A birthday story for you">
     <header class="topbar">
       <div class="wordmark">November 16 <span aria-hidden="true">·</span> 2007—2026</div>
-      <button class="sound-toggle" type="button" aria-pressed="false">Sound off</button>
     </header>
 
     <div class="stage" aria-live="polite">
@@ -662,7 +713,7 @@ But then I think about it, and there's something beautiful about it too. Every s
 </section>
 <section class="scene" data-scene="8" aria-label="My biggest wish for you">
   <div class="scene-inner">
-    <p class="eyebrow">Scene 08 <span aria-hidden="true">/</span> My biggest wish for you</p>
+    <p class="eyebrow">Scene 09 <span aria-hidden="true">/</span> My biggest wish for you</p>
     <div class="split">
       <div>
         <h2>My biggest wish for you</h2>
@@ -681,12 +732,12 @@ But then I think about it, and there's something beautiful about it too. Every s
   </div>
 </section>
 
-      <section class="scene" data-scene="cake" aria-label="Make a birthday wish">
+      <section class="scene" data-scene="9" aria-label="Make a birthday wish">
         <div class="scene-inner birthday-cake">
           <p class="eyebrow">One last birthday wish</p>
           <h2>Make a wish.</h2>
-          <p class="body-copy" style="margin-right:auto;margin-left:auto">Blow toward your microphone to put out the candles, or tap the button if you prefer.</p>
-          <div class="cake" aria-label="A birthday cake with three lit candles">
+          <p class="body-copy">Blow toward your microphone to put out the candles, or tap the button if you prefer.</p>
+          <div class="cake" data-cake aria-label="Birthday cake with three lit candles">
             <div class="cake-plate"></div>
             <div class="cake-tier"></div>
             <div class="candle candle-left"><span class="flame"></span></div>
@@ -697,14 +748,16 @@ But then I think about it, and there's something beautiful about it too. Every s
             <button class="primary-button" type="button" data-microphone>Enable mic &amp; blow</button>
             <button class="primary-button" type="button" data-tap-blow>Tap to blow</button>
           </div>
-          <p class="cake-status" aria-live="polite">Your microphone is only used to detect the breath. Nothing is recorded.</p>
-          <div class="video-reveal" data-video-reveal hidden>
-            <video class="birthday-video" controls playsinline preload="metadata">
-              <source src="birthday-video.mp4" type="video/mp4">
-              Your browser does not support video playback.
-            </video>
-            <p class="video-hint">Add your video as <strong>birthday-video.mp4</strong> beside index.html.</p>
+          <p class="cake-status" data-cake-status aria-live="polite">Microphone is only used to detect your breath. Nothing is recorded.</p>
+          <div class="balloon-reveal" data-balloon-reveal hidden>
+            <button class="balloon" type="button" data-pop-balloon aria-label="Pop the balloon to open your birthday letter">Pop me</button>
           </div>
+          <article class="birthday-letter" data-birthday-letter aria-live="polite" hidden>
+            <p class="letter-greeting">A little note for you</p>
+            <h3>Happy birthday, my love!</h3>
+            <p>I hope your day is filled with happiness, laughter, and all the love you deserve. I love you so much.</p>
+            <p class="letter-signoff">Always yours ♡</p>
+          </article>
           <button class="replay-button" type="button" data-replay>Start the story again</button>
         </div>
       </section>
@@ -712,7 +765,7 @@ But then I think about it, and there's something beautiful about it too. Every s
     <footer class="bottombar">
       <div class="scene-count" aria-live="polite">Opening</div>
       <div class="progress-wrap" aria-label="Story progress">
-        <span class="progress-label">Nine scenes &amp; a wish</span>
+        <span class="progress-label">A story in six scenes</span>
         <div class="progress-track"><div class="progress-fill"></div></div>
       </div>
       <nav class="scene-nav" aria-label="Scene navigation">
@@ -729,18 +782,16 @@ But then I think about it, and there's something beautiful about it too. Every s
       const progress = document.querySelector(".progress-fill");
       const previous = document.querySelector(".previous");
       const next = document.querySelector(".next");
-      const soundToggle = document.querySelector(".sound-toggle");
       const labels = scenes.map(scene => scene.getAttribute("aria-label") || "Birthday story");
       const cakeIndex = scenes.length - 1;
-      const cake = document.querySelector(".cake");
-      const cakeStatus = document.querySelector(".cake-status");
+      const cake = document.querySelector("[data-cake]");
+      const cakeStatus = document.querySelector("[data-cake-status]");
       const microphoneButton = document.querySelector("[data-microphone]");
       const tapBlowButton = document.querySelector("[data-tap-blow]");
-      const videoReveal = document.querySelector("[data-video-reveal]");
-      const birthdayVideo = document.querySelector(".birthday-video");
+      const balloonReveal = document.querySelector("[data-balloon-reveal]");
+      const balloon = document.querySelector("[data-pop-balloon]");
+      const birthdayLetter = document.querySelector("[data-birthday-letter]");
       let active = 0;
-      let audioContext;
-      let audioNodes = [];
       let microphoneStream;
       let microphoneContext;
       let microphoneFrame;
@@ -770,21 +821,21 @@ But then I think about it, and there's something beautiful about it too. Every s
         microphoneContext = undefined;
       }
 
-      function blowOutCandles() {
+      function extinguishCandles() {
         if (cake.classList.contains("is-blown")) return;
         cake.classList.add("is-blown");
-        cake.setAttribute("aria-label", "A birthday cake with its candles blown out");
+        cake.setAttribute("aria-label", "Birthday cake with candles blown out");
         stopMicrophone();
         microphoneButton.hidden = true;
         tapBlowButton.hidden = true;
-        cakeStatus.textContent = "Wish made. Here’s something for you…";
-        videoReveal.hidden = false;
-        birthdayVideo.load();
+        cakeStatus.textContent = "Your wish is on its way… pop the balloon to open your letter.";
+        balloonReveal.hidden = false;
+        balloon.focus();
       }
 
       async function enableMicrophone() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          cakeStatus.textContent = "Microphone access isn’t available here. Tap the button to blow out the candles.";
+          cakeStatus.textContent = "Microphone access is not available here. Tap the button to blow out the candles.";
           return;
         }
         microphoneButton.disabled = true;
@@ -794,7 +845,8 @@ But then I think about it, and there's something beautiful about it too. Every s
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
           if (!AudioContextClass) {
             stopMicrophone();
-            cakeStatus.textContent = "Microphone breath detection isn’t supported here. Tap the button to blow.";
+            microphoneButton.disabled = false;
+            cakeStatus.textContent = "Breath detection is not supported here. Tap the button to blow.";
             return;
           }
           microphoneContext = new AudioContextClass();
@@ -818,7 +870,7 @@ But then I think about it, and there's something beautiful about it too. Every s
             }
             loudFrames = Math.sqrt(sum / samples.length) > 0.12 ? loudFrames + 1 : 0;
             if (loudFrames >= 8) {
-              blowOutCandles();
+              extinguishCandles();
               return;
             }
             microphoneFrame = requestAnimationFrame(listenForBlow);
@@ -828,106 +880,61 @@ But then I think about it, and there's something beautiful about it too. Every s
           stopMicrophone();
           microphoneButton.disabled = false;
           cakeStatus.textContent = error.name === "NotAllowedError"
-            ? "Microphone permission was denied. Tap the button to blow out the candles instead."
-            : "Couldn’t start the microphone. Tap the button to blow out the candles instead.";
+            ? "Microphone permission was denied. Tap the button to blow out the candles."
+            : "Could not start the microphone. Tap the button to blow out the candles.";
           console.error("Could not start birthday breath detection.", error);
         }
       }
 
-      function resetCake() {
+      function popBalloon() {
+        if (balloon.classList.contains("is-popping")) return;
+        balloon.classList.add("is-popping");
+        balloon.disabled = true;
+        window.setTimeout(() => {
+          balloonReveal.hidden = true;
+          birthdayLetter.hidden = false;
+          cakeStatus.textContent = "A little birthday wish, just for you.";
+        }, 260);
+      }
+
+      function resetBirthday() {
         stopMicrophone();
         cake.classList.remove("is-blown");
-        cake.setAttribute("aria-label", "A birthday cake with three lit candles");
+        cake.setAttribute("aria-label", "Birthday cake with three lit candles");
         microphoneButton.hidden = false;
         microphoneButton.disabled = false;
         microphoneButton.textContent = "Enable mic & blow";
         tapBlowButton.hidden = false;
-        videoReveal.hidden = true;
-        birthdayVideo.pause();
-        birthdayVideo.currentTime = 0;
-        cakeStatus.textContent = "Your microphone is only used to detect the breath. Nothing is recorded.";
-      }
-
-      function stopSound() {
-        audioNodes.forEach(node => {
-          try { node.stop(); } catch (error) {
-            if (error.name !== "InvalidStateError") throw error;
-          }
-        });
-        audioNodes = [];
-        if (audioContext && audioContext.state !== "closed") audioContext.close();
-        audioContext = undefined;
-        soundToggle.textContent = "Sound off";
-        soundToggle.setAttribute("aria-pressed", "false");
-      }
-
-      async function startSound() {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) {
-          soundToggle.textContent = "Sound unavailable";
-          return;
-        }
-        audioContext = new AudioContextClass();
-        await audioContext.resume();
-        const master = audioContext.createGain();
-        master.gain.setValueAtTime(0, audioContext.currentTime);
-        master.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 2.5);
-        master.connect(audioContext.destination);
-        [110, 164.81, 220].forEach((frequency, index) => {
-          const oscillator = audioContext.createOscillator();
-          const voice = audioContext.createGain();
-          oscillator.type = "sine";
-          oscillator.frequency.value = frequency;
-          voice.gain.value = index === 0 ? 0.6 : 0.22;
-          oscillator.connect(voice);
-          voice.connect(master);
-          oscillator.start();
-          audioNodes.push(oscillator);
-        });
-        soundToggle.textContent = "Sound on";
-        soundToggle.setAttribute("aria-pressed", "true");
+        balloonReveal.hidden = true;
+        balloon.classList.remove("is-popping");
+        balloon.disabled = false;
+        birthdayLetter.hidden = true;
+        cakeStatus.textContent = "Microphone is only used to detect your breath. Nothing is recorded.";
       }
 
       document.querySelectorAll("[data-next]").forEach(button => {
         button.addEventListener("click", () => showScene(active + 1));
       });
-      document.querySelectorAll("[data-replay]").forEach(button => button.addEventListener("click", () => {
-        resetCake();
+      document.querySelector("[data-replay]").addEventListener("click", () => {
+        resetBirthday();
         showScene(0);
-      }));
+      });
       previous.addEventListener("click", () => showScene(active - 1));
       next.addEventListener("click", () => showScene(active + 1));
       microphoneButton.addEventListener("click", enableMicrophone);
-      tapBlowButton.addEventListener("click", blowOutCandles);
+      tapBlowButton.addEventListener("click", extinguishCandles);
+      balloon.addEventListener("click", popBalloon);
       document.addEventListener("keydown", event => {
         if (event.altKey || event.ctrlKey || event.metaKey) return;
         if (event.key === "ArrowRight") showScene(active + 1);
         if (event.key === "ArrowLeft") showScene(active - 1);
       });
-      soundToggle.addEventListener("click", async () => {
-        if (audioContext) {
-          stopSound();
-          return;
-        }
-        try {
-          await startSound();
-        } catch (error) {
-          stopSound();
-          soundToggle.textContent = "Sound unavailable";
-          console.error("Could not start the optional soundscape.", error);
-        }
-      });
-
       document.querySelectorAll(".memory-frame[data-photo]").forEach(frame => {
         const path = frame.dataset.photo;
         if (!path) return;
         frame.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,.42), transparent 55%), url("${path}")`;
         frame.classList.add("has-photo");
       });
-      window.addEventListener("pagehide", () => {
-        if (audioContext) stopSound();
-      });
-
       showScene(0);
     })();
   </script>
